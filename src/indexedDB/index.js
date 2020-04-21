@@ -5,7 +5,7 @@
  * @Website: https://senliangpi.github.io/blog/#/
  * @Date: 2020-04-20 10:20:48
  * @LastEditors: PiPi
- * @LastEditTime: 2020-04-20 10:20:56
+ * @LastEditTime: 2020-04-20 16:16:23
  */
 
 export default class amxIndexedDB {//初始参数
@@ -35,6 +35,8 @@ export default class amxIndexedDB {//初始参数
             objectStore.transaction.oncomplete = (e)=>{
               resolve(true)
             }
+          }else{
+            resolve(true)
           }
         }
       }
@@ -110,7 +112,7 @@ export default class amxIndexedDB {//初始参数
   remove(name,key){
     return new Promise((resolve, reject)=>{
       try {
-        var request = this.db.transaction([name], 'resdwrite').objectStore(name).delete(key)
+        var request = this.db.transaction([name], 'readwrite').objectStore(name).delete(key)
         request.onsuccess = (event)=>{
           resolve(event)
         }

@@ -1,6 +1,6 @@
 {
   "name": "amx-indexeddb",
-  "version": "0.0.2",
+  "version": "0.0.4",
   "description": "indexedDB 本地存储",
   "private": false,
   "main": "lib/axm.umd.min.js",
@@ -15,14 +15,14 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/SenLiangpi/Amx.git"
+    "url": "git+https://github.com/SenLiangpi/amx-indexedDB.git"
   },
   "author": "pipi",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/SenLiangpi/Amx/issues"
+    "url": "https://github.com/SenLiangpi/amx-indexedDB/issues"
   },
-  "homepage": "https://github.com/SenLiangpi/Amx#readme",
+  "homepage": "https://github.com/SenLiangpi/amx-indexedDB#readme",
   "devDependencies": {
     "webpack": "^4.34.0",
     "webpack-cli": "^3.3.4"
