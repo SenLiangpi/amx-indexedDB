@@ -5,10 +5,10 @@
  * @Website: https://senliangpi.github.io/blog/#/
  * @Date: 2020-04-20 10:20:48
  * @LastEditors: PiPi
- * @LastEditTime: 2020-04-20 16:16:23
+ * @LastEditTime: 2020-04-21 10:21:03
  */
 
-export default class amxIndexedDB {//初始参数
+export default class amxIndexedDB {
   constructor(json){
     this.V = json.v
     this.dbName = json.db
@@ -35,10 +35,9 @@ export default class amxIndexedDB {//初始参数
             objectStore.transaction.oncomplete = (e)=>{
               resolve(true)
             }
-          }else{
-            resolve(true)
           }
         }
+        resolve(true)
       }
     })
   }
@@ -84,7 +83,7 @@ export default class amxIndexedDB {//初始参数
             json.push(cursor.value)
             cursor.continue()
           }else{
-            resolve(request)
+            resolve(json)
           }
         }
       }catch(error){

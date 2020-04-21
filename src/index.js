@@ -5,10 +5,9 @@
  * @Website: https://senliangpi.github.io/blog/#/
  * @Date: 2020-04-20 10:21:32
  * @LastEditors: PiPi
- * @LastEditTime: 2020-04-20 10:31:46
+ * @LastEditTime: 2020-04-21 10:22:29
  */
 import amxIndexedDB from './indexedDB/index'
-
 const dataDB = {}
 let amxDataDBOpenDb
 dataDB.install = (Vue, store)=>{
@@ -21,15 +20,17 @@ dataDB.install = (Vue, store)=>{
     if(result){
       for(let a in store.dbData){
         for(let b in store.dbData[a]){
-          amxDataDBOpenDb.addData(a,{key:b,value:store.dbData[a][b]}).then((e) => {
-            
-          }).catch((err) => {
-            if(err){
-              console.log(err)
-            }else{
-              console.error(err)
-            }
-          })
+          let amxDBRead = setInterval(()=>{
+            amxDataDBOpenDb.addData(a,{key:b,value:store.dbData[a][b]}).then((result) => {
+              clearTimeout(amxDBRead)
+            }).catch((err) => {
+              if(err){
+                clearTimeout(amxDBRead)
+              }else{
+                console.error(err)
+              }
+            })
+          },2)
         }
       }
     }
@@ -51,6 +52,7 @@ dataDB.db = class {
         }).catch((err) => {
           if(err){
             reject(err)
+            clearTimeout(amxDBRead)
           }else{
             console.error(err)
           }
@@ -68,6 +70,7 @@ dataDB.db = class {
         }).catch((err) => {
           if(err){
             reject(err)
+            clearTimeout(amxDBRead)
           }else{
             console.error(err)
           }
@@ -84,6 +87,7 @@ dataDB.db = class {
         }).catch((err) => {
           if(err){
             reject(err)
+            clearTimeout(amxDBRead)
           }else{
             console.error(err)
           }
@@ -100,6 +104,7 @@ dataDB.db = class {
         }).catch((err) => {
           if(err){
             reject(err)
+            clearTimeout(amxDBRead)
           }else{
             console.error(err)
           }
@@ -108,5 +113,4 @@ dataDB.db = class {
     })
   }
 }
-
 export default dataDB;
