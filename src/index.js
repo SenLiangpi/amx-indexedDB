@@ -5,7 +5,7 @@
  * @Website: https://senliangpi.github.io/blog/#/
  * @Date: 2020-04-20 10:21:32
  * @LastEditors: PiPi
- * @LastEditTime: 2020-04-21 10:22:29
+ * @LastEditTime: 2020-05-21 14:11:44
  */
 import amxIndexedDB from './indexedDB/index'
 const dataDB = {}
@@ -13,7 +13,7 @@ let amxDataDBOpenDb
 dataDB.install = (Vue, store)=>{
   amxDataDBOpenDb = new amxIndexedDB({
     v: store.v,
-    db: 'amxDataDB',
+    db: store.name,
     dbData: store.dbData
   })
   amxDataDBOpenDb.open().then((result) => {
