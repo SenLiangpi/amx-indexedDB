@@ -4,113 +4,190 @@
  * @Github: https://github.com/SenLiangpi
  * @Website: https://senliangpi.github.io/blog/#/
  * @Date: 2020-04-20 10:21:32
- * @LastEditors: PiPi
- * @LastEditTime: 2020-05-21 14:11:44
+ * @LastEditors: Pi Patle
+ * @LastEditTime: 2020-09-03 17:53:48
  */
 import amxIndexedDB from './indexedDB/index'
+import { queue } from './indexedDB/queue.js'
+
+//   type: '操作类型',
+//    type: 
+//      add:添加，storeNames,data
+//      read:获取数据，storeNames,key
+//      readAll:获取对应表范围中的所有数据，storeNames,condition
+//      update:修改数据，storeNames,data
+//      remove:删除数据，storeNames,key
+//      allLength:对应表的总数据条数，storeNames
+//   storeNames: '操作表名',
+//   data: '添加或修改的数据',
+//   key: '对应表数据的key 删除或获取数据时使用',
+//   condition: '获取对应表范围中的所有数据'
+//   callback: ()=>{} 回调函数
 const dataDB = {}
-let amxDataDBOpenDb
+let amxDataDBOpenDb,
+amxDataDBQueue = new queue(false,(data)=>{
+  switch (data.type) {
+    case 'add':
+      amxDataDBOpenDb.addData(data.storeNames,data.data).then((result) => {
+        data.callback({code: true,result: result})
+      }).catch((err) => {
+        data.callback({code: false,result: err})
+      })
+      break;
+    case 'read':
+      amxDataDBOpenDb.read(data.storeNames,data.key).then((result) => {
+        data.callback({code: true,result: result})
+      }).catch((err) => {
+        data.callback({code: false,result: err})
+      })
+      break;
+    case 'readAll':
+      amxDataDBOpenDb.readAll(data.condition,data.storeNames).then((result) => {
+        data.callback({code: true,result: result})
+      }).catch((err) => {
+        data.callback({code: false,result: err})
+      })
+      break;
+    case 'update':
+      amxDataDBOpenDb.update(data.storeNames,data.data).then((result) => {
+        data.callback({code: true,result: result})
+      }).catch((err) => {
+        data.callback({code: false,result: err})
+      })
+      break;
+    case 'remove':
+      amxDataDBOpenDb.remove(data.storeNames,data.key).then((result) => {
+        data.callback({code: true,result: result})
+      }).catch((err) => {
+        data.callback({code: false,result: err})
+      })
+      break;
+    case 'allLength':
+      amxDataDBOpenDb.allLength(data.storeNames).then((result) => {
+        data.callback({code: true,result: result})
+      }).catch((err) => {
+        data.callback({code: false,result: err})
+      })
+      break;
+  }
+});
 dataDB.install = (Vue, store)=>{
+  //初始化值
   amxDataDBOpenDb = new amxIndexedDB({
     v: store.v,
     db: store.name,
     dbData: store.dbData
   })
   amxDataDBOpenDb.open().then((result) => {
-    if(result){
-      for(let a in store.dbData){
-        for(let b in store.dbData[a]){
-          let amxDBRead = setInterval(()=>{
-            amxDataDBOpenDb.addData(a,{key:b,value:store.dbData[a][b]}).then((result) => {
-              clearTimeout(amxDBRead)
-            }).catch((err) => {
-              if(err){
-                clearTimeout(amxDBRead)
-              }else{
-                console.error(err)
-              }
-            })
-          },2)
-        }
-      }
+    amxDataDBQueue.modificationSemaphore(true)
+    amxDataDBQueue.dequeue()
+    if(result){//判断是否版本更新
+      
     }
   }).catch((err) => {
     console.log(err)
   });
 }
 dataDB.db = class {
-  constructor(name){
+  constructor(name){//初始化参数
     this.name = name
-    this.millisecond = 2
   }
-  add(json){
+  add(json){//添加
     return new Promise((resolve, reject)=>{
-      let amxDBRead = setInterval(()=>{
-        amxDataDBOpenDb.addData(this.name,json).then((result) => {
-          resolve(result)
-          clearTimeout(amxDBRead)
-        }).catch((err) => {
-          if(err){
-            reject(err)
-            clearTimeout(amxDBRead)
+      amxDataDBQueue.enqueue({
+        type: 'add',
+        storeNames: this.name,
+        data: json,
+        callback: (data)=>{
+          if(data.code){
+            resolve(data.result)
           }else{
-            console.error(err)
+            reject(data.result)
           }
-        })
-      },this.millisecond)
+        }
+      })
+    })
+    
+  }
+  read(key){//获取
+    return new Promise((resolve, reject)=>{
+      amxDataDBQueue.enqueue({
+        type: 'read',
+        storeNames: this.name,
+        key: key,
+        callback: (data)=>{
+          if(data.code){
+            resolve(data.result)
+          }else{
+            reject(data.result)
+          }
+        }
+      })
     })
   }
-  read(key){
+  readAll(condition){//获取对应表范围中的所有数据
     return new Promise((resolve, reject)=>{
-      // let time = new Date().getTime();
-      let amxDBRead = setInterval(()=>{
-        amxDataDBOpenDb.read(this.name,key).then((result) => {
-          resolve(result)
-          clearTimeout(amxDBRead)
-        }).catch((err) => {
-          if(err){
-            reject(err)
-            clearTimeout(amxDBRead)
+      amxDataDBQueue.enqueue({
+        type: 'readAll',
+        storeNames: this.name,
+        condition: condition,
+        callback: (data)=>{
+          if(data.code){
+            resolve(data.result)
           }else{
-            console.error(err)
+            reject(data.result)
           }
-        })
-      },this.millisecond)
+        }
+      })
     })
   }
-  update(json){
+  update(json){//修改
     return new Promise((resolve, reject)=>{
-      let amxDBRead = setInterval(()=>{
-        amxDataDBOpenDb.update(this.name,json).then((result) => {
-          resolve(result)
-          clearTimeout(amxDBRead)
-        }).catch((err) => {
-          if(err){
-            reject(err)
-            clearTimeout(amxDBRead)
+      amxDataDBQueue.enqueue({
+        type: 'update',
+        storeNames: this.name,
+        data: json,
+        callback: (data)=>{
+          if(data.code){
+            resolve(data.result)
           }else{
-            console.error(err)
+            reject(data.result)
           }
-        })
-      },this.millisecond)
+        }
+      })
     })
   }
-  remove(key){
+  remove(key){//删除
     return new Promise((resolve, reject)=>{
-      let amxDBRead = setInterval(()=>{
-        amxDataDBOpenDb.remove(this.name,key).then((result) => {
-          resolve(result)
-          clearTimeout(amxDBRead)
-        }).catch((err) => {
-          if(err){
-            reject(err)
-            clearTimeout(amxDBRead)
+      amxDataDBQueue.enqueue({
+        type: 'remove',
+        storeNames: this.name,
+        key: key,
+        callback: (data)=>{
+          if(data.code){
+            resolve(data.result)
           }else{
-            console.error(err)
+            reject(data.result)
           }
-        })
-      },this.millisecond)
+        }
+      })
+    })
+  }
+  allLength(){//获取总数据条数
+    return new Promise((resolve, reject)=>{
+      amxDataDBQueue.enqueue({
+        type: 'allLength',
+        storeNames: this.name,
+        callback: (data)=>{
+          if(data.code){
+            resolve(data.result)
+          }else{
+            reject(data.result)
+          }
+        }
+      })
     })
   }
 }
+
 export default dataDB;

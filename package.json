@@ -1,6 +1,6 @@
 {
   "name": "amx-indexeddb",
-  "version": "0.0.7",
+  "version": "0.1.0",
   "description": "indexedDB 本地存储",
   "private": false,
   "main": "lib/axm.umd.min.js",
