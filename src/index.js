@@ -5,10 +5,11 @@
  * @Website: https://senliangpi.github.io/blog/#/
  * @Date: 2020-04-20 10:21:32
  * @LastEditors: Pi Patle
- * @LastEditTime: 2020-09-03 17:53:48
+ * @LastEditTime: 2020-09-15 09:28:20
  */
 import amxIndexedDB from './indexedDB/index'
-import { queue } from './indexedDB/queue.js'
+// import { queue } from './indexedDB/queue.js'
+import { queue_basis } from 'alml'
 
 //   type: '操作类型',
 //    type: 
@@ -25,7 +26,7 @@ import { queue } from './indexedDB/queue.js'
 //   callback: ()=>{} 回调函数
 const dataDB = {}
 let amxDataDBOpenDb,
-amxDataDBQueue = new queue(false,(data)=>{
+amxDataDBQueue = new queue_basis(false,(data)=>{
   switch (data.type) {
     case 'add':
       amxDataDBOpenDb.addData(data.storeNames,data.data).then((result) => {
@@ -107,7 +108,6 @@ dataDB.db = class {
         }
       })
     })
-    
   }
   read(key){//获取
     return new Promise((resolve, reject)=>{
