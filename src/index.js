@@ -5,7 +5,7 @@
  * @Website: https://senliangpi.github.io/blog/#/
  * @Date: 2020-04-20 10:21:32
  * @LastEditors: Pi Patle
- * @LastEditTime: 2020-09-15 09:28:20
+ * @LastEditTime: 2020-09-18 16:53:02
  */
 import amxIndexedDB from './indexedDB/index'
 // import { queue } from './indexedDB/queue.js'
@@ -26,7 +26,7 @@ import { queue_basis } from 'alml'
 //   callback: ()=>{} 回调函数
 const dataDB = {}
 let amxDataDBOpenDb,
-amxDataDBQueue = new queue_basis(false,(data)=>{
+amxDataDBQueue = new queue_basis({lock: false,callback:(data)=>{
   switch (data.type) {
     case 'add':
       amxDataDBOpenDb.addData(data.storeNames,data.data).then((result) => {
@@ -71,7 +71,7 @@ amxDataDBQueue = new queue_basis(false,(data)=>{
       })
       break;
   }
-});
+}});
 dataDB.install = (Vue, store)=>{
   //初始化值
   amxDataDBOpenDb = new amxIndexedDB({
@@ -80,7 +80,7 @@ dataDB.install = (Vue, store)=>{
     dbData: store.dbData
   })
   amxDataDBOpenDb.open().then((result) => {
-    amxDataDBQueue.modificationSemaphore(true)
+    amxDataDBQueue.controller(true)
     amxDataDBQueue.dequeue()
     if(result){//判断是否版本更新
       

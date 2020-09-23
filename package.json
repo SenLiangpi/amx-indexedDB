@@ -1,13 +1,15 @@
 {
   "name": "amx-indexeddb",
-  "version": "0.1.0",
+  "version": "0.1.2",
   "description": "indexedDB 本地存储",
   "private": false,
   "main": "lib/axm.umd.min.js",
   "keywords": [
     "vue",
     "Storage",
-    "javascript"
+    "javascript",
+    "amx-indexeddb",
+    "indexeddb"
   ],
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
@@ -28,7 +30,7 @@
     "webpack-cli": "^3.3.4"
   },
   "dependencies": {
-    "alml": "0.0.8",
+    "alml": "0.0.9",
     "lodash": "^4.17.14",
     "set-value": "^3.0.1"
   }
