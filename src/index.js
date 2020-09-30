@@ -5,7 +5,7 @@
  * @Website: https://senliangpi.github.io/blog/#/
  * @Date: 2020-04-20 10:21:32
  * @LastEditors: Pi Patle
- * @LastEditTime: 2020-09-18 16:53:02
+ * @LastEditTime: 2020-09-29 16:25:28
  */
 import amxIndexedDB from './indexedDB/index'
 // import { queue } from './indexedDB/queue.js'
@@ -72,7 +72,7 @@ amxDataDBQueue = new queue_basis({lock: false,callback:(data)=>{
       break;
   }
 }});
-dataDB.install = (Vue, store)=>{
+dataDB.install = (store)=>{
   //初始化值
   amxDataDBOpenDb = new amxIndexedDB({
     v: store.v,
