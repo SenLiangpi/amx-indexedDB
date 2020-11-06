@@ -5,12 +5,13 @@
  * @Website: https://senliangpi.github.io/blog/#/
  * @Date: 2020-10-30 13:45:55
  * @LastEditors: Pi Patle
- * @LastEditTime: 2020-11-02 14:40:51
+ * @LastEditTime: 2020-11-02 17:09:55
 -->
 <template>
   <div class="home" @click="sss($event)">
     <div class="button" ></div>
     <HelloWorld id="HelloWorld" msg="Welcome to Your Vue.js App"/>
+    <!-- <Appx /> -->
     <router-link to="/about">About</router-link>
   </div>
 </template>
@@ -18,6 +19,7 @@
 <script>
 // @ is an alias to /src
 import HelloWorld from '@/components/HelloWorld.vue'
+import Appx from '@/components/App.vue'
 function domOpacity(dom,opacity,time){
   return new Promise((resolve, reject) => {
     let anim = setInterval(function() {
@@ -53,6 +55,7 @@ function ceshi(e,dome){
     $elem.style.left = x+"px";
     $elem.style.top = y+"px";
     $elem.style.opacity = '1';
+    $elem.style.filter= 'blur(0px)';
     $elem.style.transition= 'all 0.5s ease-out';
     qsd = two/30;
     // $body.appendChild($elem);
@@ -122,6 +125,7 @@ function ceshi1(e,dome){
     $elem.style.left = x+"px";
     $elem.style.top = y+"px";
     $elem.style.opacity = '1';
+    // $elem.style.filter= 'blur(0px)';
     // $elem.style.transition= 'all 0.5s ease-out';
     qsd = two/60;
     $body.appendChild($elem);
@@ -150,7 +154,7 @@ function ceshi1(e,dome){
 export default {
   name: 'Home',
   components: {
-    HelloWorld
+    HelloWorld,Appx
   },
   methods: {
     sss(e){
@@ -159,10 +163,10 @@ export default {
       //   // this.$router.push('/about')
       //   request()
       // })
-      ceshi1(e).then((request)=>{
-        // this.$router.push('/about')
-        request()
-      })
+      // ceshi1(e).then((request)=>{
+      //   // this.$router.push('/about')
+      //   request()
+      // })
     }
   },
 }
