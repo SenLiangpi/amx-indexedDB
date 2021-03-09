@@ -5,7 +5,7 @@
  * @Website: https://senliangpi.github.io/blog/#/
  * @Date: 2020-10-30 13:45:55
  * @LastEditors: Pi Patle
- * @LastEditTime: 2020-10-30 17:37:20
+ * @LastEditTime: 2021-03-09 11:27:29
 -->
 <template>
   <div id="app">
@@ -17,6 +17,8 @@
   </div>
 </template>
 <script>
+import dataDB from './amx-indexeddb/src/index'
+let SCP_MTF_Alpha_1 = new dataDB.db('SCP_MTF_Alpha_1');
 export default {
   name: 'App',
   data () {
@@ -43,6 +45,47 @@ export default {
       //   this.transitionName = 'fold-left'
       // }
     }
+  },
+  created(){
+    // SCP_MTF_Alpha_1.add({key:'00',value:{a:1,b:2} }).then((result) => {
+    //   console.log('ok')
+    // }).catch((err) => {
+    //   console.log(err)
+    // })
+    // SCP_MTF_Alpha_1.update({key:'01',value:{a:1,b:2},expiration_time: 1000}).then((result) => {
+    //   console.log('ok')
+    // }).catch((err) => {
+    //   console.log(err)
+    // })
+    SCP_MTF_Alpha_1.read('00').then((result) => {
+      console.log(result)
+      // if(result.result.expiration_time){
+      //   if((result.result.expiration_time+result.result.creation_time)>new Date().getTime()){
+      //     console.log(true);
+      //   }else{
+      //     console.log(false)
+      //   }
+      // }else{
+      //   console.log(true)
+      // }
+    }).catch((err) => {
+      console.log(err)
+    })
+    SCP_MTF_Alpha_1.read('01').then((result) => {
+      console.log(result)
+    }).catch((err) => {
+      console.log(err)
+    })
+    SCP_MTF_Alpha_1.read('03').then((result) => {
+      console.log(result)
+    }).catch((err) => {
+      console.log(err)
+    })
+    // SCP_MTF_Alpha_1.readAll().then((result) => {
+    //   // console.log(result)
+    // }).catch((err) => {
+    //   console.log(err)
+    // })
   }
 }
 </script>

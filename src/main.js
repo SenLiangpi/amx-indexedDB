@@ -5,7 +5,7 @@
  * @Website: https://senliangpi.github.io/blog/#/
  * @Date: 2020-10-30 13:45:55
  * @LastEditors: Pi Patle
- * @LastEditTime: 2020-10-30 14:06:01
+ * @LastEditTime: 2021-03-08 15:47:06
  */
 import Vue from 'vue'
 import App from './App.vue'
@@ -25,7 +25,7 @@ let store = {
     SCP_MTF_Alpha_9:{}
   }
 }
-indexeddb.install(store)
+indexeddb.install(store);
 
 Vue.config.productionTip = false
 
