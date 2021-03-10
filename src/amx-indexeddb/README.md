@@ -4,7 +4,7 @@
  * @Email: pisenliang@gmail.com
  * @Date: 2019-06-17 15:38:23
  * @LastEditors: Pi Patle
- * @LastEditTime: 2020-09-30 09:42:51
+ * @LastEditTime: 2021-03-10 09:48:40
  -->
 # amx-indexeddb
 amx 使用IndexedDB制作的基础本地数据存储，IndexedDB 数据存储空间非常大切支持各种数据类型。amx-indexeddb 使你使用 IndexedDB 技术更加方便。
@@ -39,21 +39,35 @@ github : https://github.com/SenLiangpi/amx-indexedDB
 ```javascript
 // key //id
 // value //支持幾乎所有數據類型 (err 錯誤類型不接受)
-SCP_MTF_Alpha_1.add({key:key,value:json }).then((result) => {
+// 0.1.4 新功能
+// expiration_time //存储数据失效时间，number类型 单位毫秒；此字段非必填，不填永久有效；
+SCP_MTF_Alpha_1.add({key:key,value:json,expiration_time: 1000 }).then((result) => {
   console.log('ok')
 }).catch((err) => {
   console.log(err)
 })
+// 0.1.4 新功能
+//此条数据将在 1000 毫秒后失效
+SCP_MTF_Alpha_1.add({key:key,value:json,expiration_time: 1000 })
+//此条数据永久有效
+SCP_MTF_Alpha_1.add({key:key,value:json })
 ```
 修改 update (如果修改id不存在則寫入該值)
 ```javascript
 // key //id
 // value //支持幾乎所有數據類型 (err 錯誤類型不接受)
-SCP_MTF_Alpha_1.update({key:key,value:json }).then((result) => {
+// 0.1.4 新功能
+// expiration_time //存储数据失效时间，number类型 单位毫秒；此字段非必填，不填永久有效；
+SCP_MTF_Alpha_1.update({key:key,value:json,expiration_time: 1000 }).then((result) => {
   console.log('ok')
 }).catch((err) => {
   console.log(err)
 })
+// 0.1.4 新功能
+//此条数据将在 1000 毫秒后失效
+SCP_MTF_Alpha_1.update({key:key,value:json,expiration_time: 1000 })
+//此条数据永久有效
+SCP_MTF_Alpha_1.update({key:key,value:json })
 ```
 讀取 read 
 ```javascript
