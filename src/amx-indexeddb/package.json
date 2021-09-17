@@ -32,6 +32,6 @@
   "dependencies": {
     "alml": "0.0.9",
     "lodash": "^4.17.14",
-    "set-value": "^3.0.1"
+    "set-value": "^4.0.1"
   }
 }
