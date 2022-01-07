@@ -5,7 +5,7 @@
  * @Website: https://senliangpi.github.io/blog/#/
  * @Date: 2020-04-20 10:21:32
  * @LastEditors: Pi Patle
- * @LastEditTime: 2020-09-29 16:25:28
+ * @LastEditTime: 2021-03-09 11:26:44
  */
 import amxIndexedDB from './indexedDB/index'
 // import { queue } from './indexedDB/queue.js'
@@ -95,6 +95,7 @@ dataDB.db = class {
   }
   add(json){//添加
     return new Promise((resolve, reject)=>{
+      json.creation_time = new Date().getTime();
       amxDataDBQueue.enqueue({
         type: 'add',
         storeNames: this.name,
@@ -117,7 +118,41 @@ dataDB.db = class {
         key: key,
         callback: (data)=>{
           if(data.code){
-            resolve(data.result)
+            if(data.result.result){
+              if(data.result.result.expiration_time){
+                if((data.result.result.creation_time+data.result.result.expiration_time)>new Date().getTime()){
+                  resolve(data.result)
+                }else{
+                  amxDataDBQueue.enqueue({
+                    type: 'remove',
+                    storeNames: this.name,
+                    key: key,
+                    callback: (data)=>{
+                      if(data.code){
+                        amxDataDBQueue.enqueue({
+                          type: 'read',
+                          storeNames: this.name,
+                          key: key,
+                          callback: (data)=>{
+                            if(data.code){
+                              resolve(data.result)
+                            }else{
+                              reject(data.result)
+                            }
+                          }
+                        })
+                      }else{
+                        reject(data.result)
+                      }
+                    }
+                  })
+                }
+              }else{
+                resolve(data.result)
+              }
+            }else{
+              resolve(data.result)
+            }
           }else{
             reject(data.result)
           }
@@ -142,6 +177,7 @@ dataDB.db = class {
     })
   }
   update(json){//修改
+    json.creation_time = new Date().getTime();
     return new Promise((resolve, reject)=>{
       amxDataDBQueue.enqueue({
         type: 'update',
