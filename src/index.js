@@ -5,7 +5,7 @@
  * @Website: https://senliangpi.github.io/blog/#/
  * @Date: 2020-04-20 10:21:32
  * @LastEditors: Pi Patle
- * @LastEditTime: 2021-03-09 11:26:44
+ * @LastEditTime: 2023-06-02 16:13:53
  */
 import amxIndexedDB from './indexedDB/index'
 // import { queue } from './indexedDB/queue.js'
@@ -74,6 +74,7 @@ amxDataDBQueue = new queue_basis({lock: false,callback:(data)=>{
 }});
 dataDB.install = (store)=>{
   //初始化值
+  store.dbData.interface_data_cache = {}
   amxDataDBOpenDb = new amxIndexedDB({
     v: store.v,
     db: store.name,
@@ -223,6 +224,34 @@ dataDB.db = class {
         }
       })
     })
+  }
+}
+let interfaceDataCache = new dataDB.db('interface_data_cache')
+/**
+ * @Author: Pi Patle
+ * @description: IFDataCache，用于处理接口数据缓存
+ * @param {String} key 存储使用的唯一key
+ * @param {Function} inter 接口函数
+ * @param {Number} expirationTime 存储数据失效时间，number类型 单位毫秒；此字段非必填，不填永久有效
+ * @return {Function}
+ */
+dataDB.IFDataCache = (key, inter, expirationTime) => {
+  return async (params)=>{
+    // 从缓存中读取数据
+    const result = await interfaceDataCache.read(key)
+    if (result.result) {
+      return result.result.value
+    } else {
+      // 调用接口函数获取数据
+      const request = await inter(params)
+      // 更新缓存数据
+      interfaceDataCache.update({
+        key: key,
+        value: request,
+        expiration_time: expirationTime,
+      })
+      return request
+    }
   }
 }
 
