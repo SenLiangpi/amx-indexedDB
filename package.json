@@ -4,6 +4,16 @@
   "description": "indexedDB 本地存储",
   "private": false,
   "main": "lib/axm.umd.min.js",
+  "module": "lib/amx-indexeddb.es.js",
+  "exports": {
+    ".": {
+      "import": "./lib/amx-indexeddb.es.js",
+      "require": "./lib/axm.umd.min.js"
+    }
+  },
+  "files": [
+    "lib"
+  ],
   "keywords": [
     "vue",
     "Storage",
@@ -13,7 +23,8 @@
   ],
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "webpack"
+    "build": "vite build",
+    "dev": "vite"
   },
   "repository": {
     "type": "git",
@@ -25,13 +36,13 @@
     "url": "https://github.com/SenLiangpi/amx-indexedDB/issues"
   },
   "homepage": "https://github.com/SenLiangpi/amx-indexedDB#readme",
-  "devDependencies": {
-    "webpack": "^4.34.0",
-    "webpack-cli": "^3.3.4"
-  },
   "dependencies": {
     "alml": "0.0.9",
     "lodash": "^4.17.14",
     "set-value": "^3.0.1"
+  },
+  "devDependencies": {
+    "terser": "^5.44.1",
+    "vite": "^7.2.4"
   }
 }
