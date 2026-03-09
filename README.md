@@ -115,4 +115,4 @@ import dataDB from 'amx-indexeddb'
  */
 dataDB.IFDataCache('key', inter, expirationTime)
 ```
-皮皮研究所出品
+东云研究所 皮皮博士
